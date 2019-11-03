@@ -80,7 +80,7 @@ try:
             print("Found diff: " + str(diff))
     print("==> UPDATE COMPLETE.\n")
 except Exception as e:
-    print("==> COULD NOT CHECK FOR UPDATES SO WILL CONTINUE WITH CURRENT KNOWLEDGE.\n")
+    print("==> COULD NOT CHECK FOR UPDATES DUE TO THE FOLLOWING EXCEPTION - %s" % str(e))
+    print("==> WILL CONTINUE WITH CURRENT KNOWLEDGE.\n")
     pass
-
 
