@@ -64,12 +64,15 @@ try:
     print("==> FOUND LOCAL GIT REPO\n")
 except git.exc.InvalidGitRepositoryError:
     print("==> LOCAL GIT REPO NOT FOUND. WILL FETCH ONE FROM THE INTERNET. YOU WILL SEE A NEW DIRECTORY CREATED AT THE END.\n")
-    try:
-        repo = git.Repo.clone_from(GIT_REPO_URL, SCRIPT_WORK_DIR)
-        os.unlink(os.path.abspath(__file__))
-        print ("==> JUST EXECUTE THIS SCRIPT AGAIN FROM sdapovfastforward DIRECTORY\n")
-    except Exception as e:
-        print("==> GIT REPO READING EXCEPTION %s. SO EXITING." % str(e))
+    if not os.path.exists(SCRIPT_WORK_DIR):
+        try:
+            repo = git.Repo.clone_from(GIT_REPO_URL, SCRIPT_WORK_DIR)
+            os.unlink(os.path.abspath(__file__))
+            print ("==> JUST EXECUTE THIS SCRIPT AGAIN FROM sdapovfastforward DIRECTORY\n")
+        except Exception as e:
+            print("==> GIT REPO READING EXCEPTION %s. SO EXITING." % str(e))
+    else:
+        print("==> CANNOT FETCH GIT REPO SINCE A LOCAL DIRECTORY sdapovfastforward EXISTS. KINDLY DELETE OR RENAME THAT DIRECTORY TO SOMETHING ELSE AND TRY AGAIN.\n")
     input("PRESS ENTER TO EXIT")
     sys.exit(0)
 except Exception as e:
