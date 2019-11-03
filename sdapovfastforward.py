@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 #
 #   AUTHOR: ANAND KANANI
 #   PURPOSE: THIS SCRIPT HELPS IN SDA POV DEMO CONFIGURATION FAST-FORWARDING.
@@ -74,14 +75,36 @@ try:
     repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
     print("==> CHECKING FOR UPDATES.\n")
     repo.remotes.origin.fetch()
-    fetch_info = repo.remotes.origin.pull()
-    for single_fetch_info in fetch_info:
-        for diff in single_fetch_info.commit.diff(single_fetch_info.old_commit):
-            print("Found diff: " + str(diff))
+    repo.remotes.origin.pull()
     print("==> UPDATE COMPLETE.\n")
 except Exception as e:
-    print("==> COULD NOT CHECK FOR UPDATES DUE TO THE FOLLOWING EXCEPTION - %s" % str(e))
-    print("==> WILL CONTINUE WITH CURRENT KNOWLEDGE.\n")
-    pass
+    if "commit your changes" in str(e):
+        print("==> IT SEEMS YOU MODIFIED THE SCRIPT FILES LOCALLY. SO THE SCRIPT CANNOT PULL AND OVERWRITE THE NEW UPDATES.\n")
+        while True:
+            a = input("WOULD YOU LIKE TO OVERRIDE THE LOCAL CHANGES BEFORE UPDATING? [Y/N] ")
+            if a.lower() in ["yes","y"]:
+                repo.git.reset('--hard','origin/master')
+                break
+            elif a.lower() in ["no","n"]:
+                while True:
+                    print("")
+                    a = input("WOULD YOU LIKE TO CONTINUE WITH EXISTING VERSION OF THE SCRIPT? [Y/N] ")
+                    if a.lower() in ["yes","y"]:
+                        print("\n==> WILL CONTINUE WITH EXISTING VERSION OF THE SCRIPT.\n")
+                        break
+                    elif a.lower() in ["no","n"]:
+                        input("PRESS ENTER TO EXIT")
+                        sys.exit(0)
+                    else:
+                        print("ENTER EITHER YES/NO")
+                break
+            else:
+                print("ENTER EITHER YES/NO")
+    else:
+        print("==> COULD NOT CHECK FOR UPDATES DUE TO THE FOLLOWING EXCEPTION - %s" % str(e))
+        print("==> WILL CONTINUE WITH EXISTING VERSION OF THE SCRIPT.\n")
+    
 
+# parsing the API Files
+print ("Now the real work")
 
