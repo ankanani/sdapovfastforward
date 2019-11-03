@@ -9,6 +9,7 @@
 import os
 import sys
 import subprocess
+import hashlib
 
 print("")
 print("  === WELCOME TO THE SDA POV DEMO CONFIGURATION FAST-FORWARDING SCRIPT ===\n")
@@ -76,13 +77,21 @@ except Exception as e:
     input("PRESS ENTER TO EXIT")
     sys.exit(0)
 
+# calculating self checksum
+orig_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
+
 # update local git repo
 try:
     repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
     print("==> CHECKING FOR UPDATES.\n")
     repo.remotes.origin.fetch()
     repo.remotes.origin.pull()
-    print("==> UPDATE COMPLETE.\n")
+    print("==> UPDATE CHECK COMPLETE.\n")
+    new_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
+    if new_sum != orig_sum:
+        print("==> THIS SCRIPT IS UPDATED. SO YOU NEED TO EXECUTE IT AGAIN.\n")
+        input("PRESS ENTER TO EXIT")
+        sys.exit(0)
 except Exception as e:
     if "commit your changes" in str(e):
         print("==> IT SEEMS YOU MODIFIED THE SCRIPT FILES LOCALLY. SO THE SCRIPT CANNOT PULL AND OVERWRITE THE NEW UPDATES.\n")
