@@ -84,6 +84,8 @@ except Exception as e:
             a = input("WOULD YOU LIKE TO OVERRIDE THE LOCAL CHANGES BEFORE UPDATING? [Y/N] ")
             if a.lower() in ["yes","y"]:
                 repo.git.reset('--hard','origin/master')
+                repo.remotes.origin.pull()
+                print("\n==> LOCAL CHANGES ARE OVERWRITTEN AND UPDATE COMPLETE.\n")
                 break
             elif a.lower() in ["no","n"]:
                 while True:
