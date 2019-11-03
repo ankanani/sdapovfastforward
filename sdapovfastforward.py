@@ -47,12 +47,12 @@ except:
 
 # critical variables are in uppercase
 GIT_REPO_URL = "https://github.com/ankanani/sdapovfastforward.git"
-SCRIPT_WORK_DIR = os.path.join(".","sdapovfastforward")
-SCRIPT_WORK_DIR_TEMP = os.path.join(".","sdapovfastforward","temp")
+SCRIPT_WORK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),"sdapovfastforward")
+SCRIPT_WORK_DIR_TEMP = os.path.join(os.path.dirname(os.path.abspath(__file__)),"sdapovfastforward","temp")
 
 # clone git repo if not exists already
 try:
-    repo = git.Repo(".")
+    repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
     print("==> FOUND LOCAL GIT REPO\n")
 except git.exc.InvalidGitRepositoryError:
     print("==> LOCAL GIT REPO NOT FOUND. WILL FETCH ONE FROM THE INTERNET. YOU WILL SEE A NEW DIRECTORY CREATED AT THE END.\n")
