@@ -45,6 +45,12 @@ except:
     from requests.exceptions import HTTPError
     from urllib3.exceptions import InsecureRequestWarning
     requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+try:
+    from postpython.core import PostPython
+except:
+    print("==> INSTALLING THE REQUIRED PYTHON MODULE - postpython\n")
+    subprocess.call([sys.executable, "-m", "pip", "install", "postpython"])
+    from postpython.core import PostPython
 
 # critical variables are in uppercase
 GIT_REPO_URL = "https://github.com/ankanani/sdapovfastforward.git"
