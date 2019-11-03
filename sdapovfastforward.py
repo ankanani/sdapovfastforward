@@ -69,3 +69,17 @@ except Exception as e:
     input("PRESS ENTER TO EXIT")
     sys.exit(0)
 
+# update local git repo
+try:
+    repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
+    print("==> CHECKING FOR UPDATES.\n")
+    repo.remotes.origin.fetch()
+    fetch_info = repo.remotes.origin.pull()
+    for single_fetch_info in fetch_info:
+        for diff in single_fetch_info.commit.diff(single_fetch_info.old_commit):
+            print("Found diff: " + str(diff))
+    print("==> UPDATE COMPLETE.\n")
+except Exception as e:
+    print("==> COULD NOT CHECK FOR UPDATES SO WILL CONTINUE WITH CURRENT KNOWLEDGE.\n")
+    pass
+
