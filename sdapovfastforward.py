@@ -89,7 +89,7 @@ try:
     print("==> UPDATE CHECK COMPLETE.\n")
     new_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
     if new_sum != orig_sum:
-        print("==> THIS SCRIPT IS UPDATED. SO YOU NEED TO EXECUTE IT AGAIN.\n")
+        print("==> THIS SCRIPT IS UPDATED. SO YOU NEED TO EXECUTE IT AGAIN.")
         input("PRESS ENTER TO EXIT")
         sys.exit(0)
 except Exception as e:
