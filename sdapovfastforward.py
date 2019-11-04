@@ -69,7 +69,7 @@ print("==> FOUND ALL REQUIRED PYTHON PACKAGES\n")
 # critical variables are in uppercase
 GIT_REPO_URL = "https://github.com/ankanani/sdapovfastforward.git"
 SCRIPT_WORK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),"sdapovfastforward")
-SCRIPT_WORK_DIR_TEMP = os.path.join(os.path.dirname(os.path.abspath(__file__)),"sdapovfastforward","temp")
+SCRIPT_WORK_DIR_POSTMAN = os.path.join(os.path.dirname(os.path.abspath(__file__)),"postman")
 
 # clone git repo if not exists already
 try:
@@ -211,7 +211,106 @@ except subprocess.CalledProcessError as e:
         input("PRESS ENTER TO EXIT")
         sys.exit(0)
 
-# parsing the API Files
-print ("Now the real work")
-input("PRESS ENTER TO EXIT")
+# now the core part
+print("==> NOW LETS GET WORKING")
 
+# search for postman collections and ask the user to choose one
+print("\n")
+all_postman_collection_files = [f for f in os.listdir(SCRIPT_WORK_DIR_POSTMAN) if os.path.isfile( os.path.join(SCRIPT_WORK_DIR_POSTMAN, f) ) and "postman_collection" in f ]
+if len(all_postman_collection_files) > 0:
+    print("==> THE FOLLOWING POSTMAN COLLECTIONS WERE FOUND.")
+    count = 0
+    for f in all_postman_collection_files:
+        count+=1
+        print("%s - %s" % (count,f) )
+else:
+    print("==> COULD NOT FIND ANY FILE THAT APPEAR TO BE A POSTMAN COLLECTION!")
+    input("PRESS ENTER TO EXIT")
+    sys.exit(0)
+
+selected_postman_collection_file = ''
+if len(all_postman_collection_files)==1:
+    selected_postman_collection_file = all_postman_collection_files[0]
+    while True:
+        a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
+        if a.lower() in ["yes","y"]:
+            break
+        elif a.lower() in ["no","n"]:
+            input("PRESS ENTER TO EXIT")
+            sys.exit(0)
+        else:
+            print("ENTER EITHER YES/NO")
+else:
+    while True:
+        print("")
+        try:
+            a = int(input("WHICH ONE WOULD YOU LIKE TO UTILIZE? [1-%s] " % (len(all_postman_collection_files)) ))
+            selected_postman_collection_file = all_postman_collection_files[a-1]
+            print("\nYOU HAVE SELECTED POSTMAN COLLECTION:- %s" % (selected_postman_collection_file) )
+            
+            a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
+            if a.lower() in ["yes","y"]:
+                break
+        except:
+            print("THAT'S NOT A VALID OPTION!")
+
+
+# search for postman environments and ask the user to choose one
+print("\n")
+all_postman_environment_files = [f for f in os.listdir(SCRIPT_WORK_DIR_POSTMAN) if os.path.isfile( os.path.join(SCRIPT_WORK_DIR_POSTMAN, f) ) and "postman_environment" in f ]
+if len(all_postman_environment_files) > 0:
+    print("==> THE FOLLOWING POSTMAN ENVIRONMENTS WERE FOUND.")
+    count = 0
+    for f in all_postman_environment_files:
+        count+=1
+        print("%s - %s" % (count,f) )
+else:
+    print("==> COULD NOT FIND ANY FILE THAT APPEAR TO BE A POSTMAN ENVIRONMENT!")
+    input("PRESS ENTER TO EXIT")
+    sys.exit(0)
+
+selected_postman_environment_file = ''
+if len(all_postman_environment_files)==1:
+    selected_postman_environment_file = all_postman_environment_files[0]
+    while True:
+        a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
+        if a.lower() in ["yes","y"]:
+            break
+        elif a.lower() in ["no","n"]:
+            input("PRESS ENTER TO EXIT")
+            sys.exit(0)
+        else:
+            print("ENTER EITHER YES/NO")
+else:
+    while True:
+        print("")
+        try:
+            a = int(input("WHICH ONE WOULD YOU LIKE TO UTILIZE? [1-%s] " % (len(all_postman_environment_files)) ))
+            selected_postman_environment_file = all_postman_environment_files[a-1]
+            print("\nYOU HAVE SELECTED POSTMAN ENVIRONMENT:- %s" % (selected_postman_environment_file) )
+            
+            a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
+            if a.lower() in ["yes","y"]:
+                break
+        except:
+            print("THAT'S NOT A VALID OPTION!")
+
+
+# Now lets run the "newman"
+while True:
+    print("\n==> WITH THE FOLLOWING SELECTION?\nPOSTMAN COLLECTION - %s\nPOSTMAN ENVIRONMENT - %s\n" % (selected_postman_collection_file,selected_postman_environment_file))
+    a = input("\nARE YOU READY TO FAST FORWARD YOUR SDA POV? [Y/N] ")
+    if a.lower() in ["yes","y"]:
+        break
+    elif a.lower() in ["no","n"]:
+        input("PRESS ENTER TO EXIT")
+        sys.exit(0)
+    else:
+        print("ENTER EITHER YES/NO")
+
+print("\n\n==> EXECUTING NEWMAN NOW\n")
+subprocess.call(["newman", "run", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_collection_file), "-e", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_environment_file)], shell=True)
+
+print("\n\n==> IF ALL API CALLS WORKED IN THE ABOVE RUN THEN YOU ARE ALL SET.\n")
+input("PRESS ENTER TO EXIT")
+sys.exit(0)
