@@ -12,6 +12,7 @@ import os
 import sys
 import subprocess
 import hashlib
+import platform
 
 print("")
 print("  === WELCOME TO THE SDA POV DEMO CONFIGURATION FAST-FORWARDING SCRIPT ===\n")
@@ -38,6 +39,12 @@ except:
     print("==> INSTALLING THE REQUIRED PYTHON MODULE - gitpython\n")
     subprocess.call([sys.executable, "-m", "pip", "install", "gitpython"])
     import git
+try:
+    import wget
+except:
+    print("==> INSTALLING THE REQUIRED PYTHON MODULE - wget\n")
+    subprocess.call([sys.executable, "-m", "pip", "install", "wget"])
+    import wget
 try:
     import requests
     from requests.exceptions import HTTPError
@@ -128,6 +135,78 @@ except Exception as e:
         print("==> COULD NOT CHECK FOR UPDATES DUE TO THE FOLLOWING EXCEPTION - %s" % str(e))
         print("==> WILL CONTINUE WITH EXISTING VERSION OF THE SCRIPT.\n")
     
+
+# checking if node.js exists for - "newman" program
+try:
+    subprocess.call(["node", "-v"])
+except OSError as e:
+    print ("==> IT SEEMS NODE.JS IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL NODE.JS")
+    while True:
+        print("")
+        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF NODE.JS? [Y/N] ")
+        if a.lower() in ["yes","y"]:
+            break
+        elif a.lower() in ["no","n"]:
+            input("PRESS ENTER TO EXIT")
+            sys.exit(0)
+        else:
+            print("ENTER EITHER YES/NO")
+    break
+    
+    print("==> DOWNLOADING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
+    if platform.system().lower() == "windows":
+        if platform.machine().endswith('64')
+            url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msi"
+            wget.download(url, "./")
+            subprocess.call(["msiexec.exe", "/qn", "/i", "node-v12.13.0-x64.msi"])
+        else:
+            url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0-x86.msi"
+            wget.download(url, "./")
+            subprocess.call(["msiexec.exe", "/qn", "/i", "node-v12.13.0-x86.msi"])
+        try:
+            subprocess.call(["node", "-v"])
+        except OSError as e:
+            print("NODE.JS IS DOWNLOADED. HOWEVER, IT COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY AND THEN RUN THIS SCRIPT AGAIN.")
+            input("PRESS ENTER TO EXIT")
+            sys.exit(0)        
+    elif platform.system().lower() == "darwin":
+            url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0.pkg"
+            wget.download(url, "./")
+            print("NODE.JS IS DOWNLOADED. JUST DOUBLE-CLICK TO INSTALL IT AND THEN RUN THIS SCRIPT AGAIN.")
+            input("PRESS ENTER TO EXIT")
+            sys.exit(0)
+    else:
+        print("THIS SCRIPT IS RUNNING ON AN UNSUPPORTED OS. CURRENTLY ONLY WINDOWS OR MAC ARE SUPPORTED.")
+        input("PRESS ENTER TO EXIT")
+        sys.exit(0)
+
+
+# checking for the existence of node- "newman"
+try:
+    subprocess.call(["newman", "-v"])
+except OSError as e:
+    print ("==> IT SEEMS POSTMAN - NEWMAN PACKAGE IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL POSTMAN - NEWMAN PACKAGE")
+    while True:
+        print("")
+        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF POSTMAN - NEWMAN PACKAGE? [Y/N] ")
+        if a.lower() in ["yes","y"]:
+            break
+        elif a.lower() in ["no","n"]:
+            input("PRESS ENTER TO EXIT")
+            sys.exit(0)
+        else:
+            print("ENTER EITHER YES/NO")
+    break
+    
+    print("==> INSTALLING POSTMAN - NEWMAN PACKAGE SETUP. THIS TAKES A FEW MINUTES")
+    subprocess.call(["npm", "install", "-g", "newman"])
+    
+    try:
+        subprocess.call(["newman", "-v"])
+    except:
+        print("POSTMAN - NEWMAN PACKAGE COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY USING THE COMMAND node install -g newman AND THEN RUN THIS SCRIPT AGAIN.")
+        input("PRESS ENTER TO EXIT")
+        sys.exit(0)
 
 # parsing the API Files
 print ("Now the real work")
