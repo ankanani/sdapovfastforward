@@ -64,6 +64,8 @@ except:
     subprocess.call([sys.executable, "-m", "pip", "install", "postpython"])
     from postpython.core import PostPython
 
+print("==> FOUND ALL REQUIRED PYTHON PACKAGES\n")
+
 # critical variables are in uppercase
 GIT_REPO_URL = "https://github.com/ankanani/sdapovfastforward.git"
 SCRIPT_WORK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),"sdapovfastforward")
@@ -139,6 +141,7 @@ except Exception as e:
 # checking if node.js exists for - "newman" program
 try:
     subprocess.call(["node", "-v"])
+    print("==> FOUND NODE.JS\n")
 except OSError as e:
     print ("==> IT SEEMS NODE.JS IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL NODE.JS")
     while True:
@@ -184,6 +187,7 @@ except OSError as e:
 # checking for the existence of node- "newman"
 try:
     subprocess.call(["newman", "-v"])
+    print("==> FOUND POSTMAN - NEWMAN PACKAGE\n")
 except OSError as e:
     print ("==> IT SEEMS POSTMAN - NEWMAN PACKAGE IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL POSTMAN - NEWMAN PACKAGE")
     while True:
