@@ -99,7 +99,7 @@ orig_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
 # update local git repo
 try:
     repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
-    print("==> CHECKING FOR UPDATES.\n")
+    print("==> CHECKING FOR CODE UPDATES.\n")
     repo.remotes.origin.fetch()
     repo.remotes.origin.pull()
     print("==> UPDATE CHECK COMPLETE.\n")
@@ -140,7 +140,7 @@ except Exception as e:
 
 # checking if node.js exists for - "newman" program
 try:
-    subprocess.call(["node", "-v"])
+    subprocess.check_output(["node", "-v"])
     print("==> FOUND NODE.JS\n")
 except OSError as e:
     print ("==> IT SEEMS NODE.JS IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL NODE.JS")
@@ -155,22 +155,22 @@ except OSError as e:
         else:
             print("ENTER EITHER YES/NO")
     
-    print("==> DOWNLOADING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
+    print("\n==> DOWNLOADING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
     if platform.system().lower() == "windows":
         if platform.machine().endswith('64'):
             url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msi"
             wget.download(url, "./")
-            subprocess.call(["msiexec.exe", "/qn", "/i", "node-v12.13.0-x64.msi"])
+            print("\n\n==> INSTALLING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
+            subprocess.call('msiexec.exe /qb /i node-v12.13.0-x64.msi')
         else:
             url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0-x86.msi"
             wget.download(url, "./")
-            subprocess.call(["msiexec.exe", "/qn", "/i", "node-v12.13.0-x86.msi"])
-        try:
-            subprocess.call(["node", "-v"])
-        except OSError as e:
-            print("NODE.JS IS DOWNLOADED. HOWEVER, IT COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY AND THEN RUN THIS SCRIPT AGAIN.")
-            input("PRESS ENTER TO EXIT")
-            sys.exit(0)        
+            print("\n\n==> INSTALLING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
+            subprocess.call('msiexec.exe /qb /i node-v12.13.0-x86.msi')
+        
+        print("\n==> NODE.JS IS INSTALLATION COMPLETE.  NOW RUN THIS SCRIPT AGAIN.")
+        input("PRESS ENTER TO EXIT")
+        sys.exit(0)
     elif platform.system().lower() == "darwin":
             url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0.pkg"
             wget.download(url, "./")
@@ -185,13 +185,13 @@ except OSError as e:
 
 # checking for the existence of node- "newman"
 try:
-    subprocess.call(["newman", "-v"], shell=True)
-    print("==> FOUND POSTMAN - NEWMAN PACKAGE\n")
-except OSError as e:
-    print ("==> IT SEEMS POSTMAN - NEWMAN PACKAGE IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL POSTMAN - NEWMAN PACKAGE")
+    subprocess.check_output(["newman", "-v"], shell=True)
+    print("==> FOUND POSTMAN - NEWMAN NODE PACKAGE\n")
+except subprocess.CalledProcessError as e:
+    print ("\n==> IT SEEMS POSTMAN - NEWMAN PACKAGE IS NOT INSTALLED. \nTHIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL POSTMAN - NEWMAN NODE PACKAGE")
     while True:
         print("")
-        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF POSTMAN - NEWMAN PACKAGE? [Y/N] ")
+        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF POSTMAN - NEWMAN NODE PACKAGE? [Y/N] ")
         if a.lower() in ["yes","y"]:
             break
         elif a.lower() in ["no","n"]:
@@ -200,12 +200,13 @@ except OSError as e:
         else:
             print("ENTER EITHER YES/NO")
     
-    print("==> INSTALLING POSTMAN - NEWMAN PACKAGE SETUP. THIS TAKES A FEW MINUTES")
+    print("\n==> INSTALLING POSTMAN - NEWMAN PACKAGE SETUP. THIS TAKES A FEW MINUTES")
     subprocess.call(["npm", "install", "-g", "newman"], shell=True)
-    
+    print("")
     try:
-        subprocess.call(["newman", "-v"], shell=True)
-    except:
+        subprocess.check_output(["newman", "-v"], shell=True)
+        print("==> POSTMAN - NEWMAN PACKAGE INSTALLED SUCCESSFULLY\n")
+    except subprocess.CalledProcessError as e:
         print("POSTMAN - NEWMAN PACKAGE COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY USING THE COMMAND node install -g newman AND THEN RUN THIS SCRIPT AGAIN.")
         input("PRESS ENTER TO EXIT")
         sys.exit(0)
