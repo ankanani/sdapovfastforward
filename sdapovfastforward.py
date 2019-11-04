@@ -158,7 +158,7 @@ except OSError as e:
     
     print("==> DOWNLOADING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
     if platform.system().lower() == "windows":
-        if platform.machine().endswith('64')
+        if platform.machine().endswith('64'):
             url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msi"
             wget.download(url, "./")
             subprocess.call(["msiexec.exe", "/qn", "/i", "node-v12.13.0-x64.msi"])
