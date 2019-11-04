@@ -185,7 +185,7 @@ except OSError as e:
 
 # checking for the existence of node- "newman"
 try:
-    subprocess.call(["npm", "run", "newman", "-v"])
+    subprocess.call(["newman", "-v"], shell=True)
     print("==> FOUND POSTMAN - NEWMAN PACKAGE\n")
 except OSError as e:
     print ("==> IT SEEMS POSTMAN - NEWMAN PACKAGE IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL POSTMAN - NEWMAN PACKAGE")
@@ -201,10 +201,10 @@ except OSError as e:
             print("ENTER EITHER YES/NO")
     
     print("==> INSTALLING POSTMAN - NEWMAN PACKAGE SETUP. THIS TAKES A FEW MINUTES")
-    subprocess.call(["npm", "install", "-g", "newman"])
+    subprocess.call(["npm", "install", "-g", "newman"], shell=True)
     
     try:
-        subprocess.call(["npm", "run", "newman", "-v"])
+        subprocess.call(["newman", "-v"], shell=True)
     except:
         print("POSTMAN - NEWMAN PACKAGE COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY USING THE COMMAND node install -g newman AND THEN RUN THIS SCRIPT AGAIN.")
         input("PRESS ENTER TO EXIT")
