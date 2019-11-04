@@ -154,7 +154,6 @@ except OSError as e:
             sys.exit(0)
         else:
             print("ENTER EITHER YES/NO")
-    break
     
     print("==> DOWNLOADING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
     if platform.system().lower() == "windows":
@@ -200,7 +199,6 @@ except OSError as e:
             sys.exit(0)
         else:
             print("ENTER EITHER YES/NO")
-    break
     
     print("==> INSTALLING POSTMAN - NEWMAN PACKAGE SETUP. THIS TAKES A FEW MINUTES")
     subprocess.call(["npm", "install", "-g", "newman"])
