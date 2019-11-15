@@ -33,6 +33,56 @@ else:
     input("PRESS ENTER TO EXIT")
     os._exit(0)
 
+
+# checking for python wget module and installing it if not already present
+try:
+    import wget
+except:
+    print("==> INSTALLING THE REQUIRED PYTHON MODULE - wget\n")
+    subprocess.call([sys.executable, "-m", "pip", "install", "wget"])
+    import wget
+
+
+# checking if git exists
+try:
+    subprocess.check_output(["git", "--version"])
+    print("==> FOUND GIT INSTALLED\n")
+except OSError as e:
+    print ("==> IT SEEMS GIT IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL GIT")
+    while True:
+        print("")
+        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF GIT? [Y/N] ")
+        if a.lower() in ["yes","y"]:
+            break
+        elif a.lower() in ["no","n"]:
+            input("PRESS ENTER TO EXIT")
+            sys.exit(0)
+        else:
+            print("ENTER EITHER YES/NO")
+    
+    print("\n==> DOWNLOADING GIT SETUP. THIS TAKES A FEW MINUTES")
+    if platform.system().lower() == "windows":
+        if platform.machine().endswith('64'):
+            url = "https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-32-bit.exe"
+            wget.download(url, "./")
+            print("\n\n==> INSTALLING GIT SETUP. THIS TAKES A FEW MINUTES")
+            subprocess.call('Git-2.24.0.2-32-bit.exe /silent')
+        else:
+            url = "https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe"
+            wget.download(url, "./")
+            print("\n\n==> INSTALLING GIT SETUP. THIS TAKES A FEW MINUTES")
+            subprocess.call('Git-2.24.0.2-64-bit.exe /silent')
+        
+        print("\n==> GIT IS INSTALLATION COMPLETE.  NOW RUN THIS SCRIPT AGAIN.")
+        input("PRESS ENTER TO EXIT")
+        sys.exit(0)
+    else:
+        print("THIS SCRIPT COULD NOT FIND GIT INSTALLED ON YOUR SYSTEM. PLEASE INSTALL GIT AND THEN TRY AGAIN.")
+        input("PRESS ENTER TO EXIT")
+        sys.exit(0)
+
+
+
 # checking for special python modules and installing them if not already present
 try:
     import git
@@ -40,12 +90,6 @@ except:
     print("==> INSTALLING THE REQUIRED PYTHON MODULE - gitpython\n")
     subprocess.call([sys.executable, "-m", "pip", "install", "gitpython"])
     import git
-try:
-    import wget
-except:
-    print("==> INSTALLING THE REQUIRED PYTHON MODULE - wget\n")
-    subprocess.call([sys.executable, "-m", "pip", "install", "wget"])
-    import wget
 try:
     import requests
     from requests.exceptions import HTTPError
