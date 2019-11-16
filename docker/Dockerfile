@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 RUN git clone $GIT_REPO
 #RUN git checkout $GIT_BRANCH
 
-COPY ../requirements.txt .
+COPY requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 CMD python3 $python_script
