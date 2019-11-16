@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 AUTHOR: ANAND KANANI
@@ -15,6 +15,7 @@ import git
 
 # critical variables are in uppercase
 GIT_REPO_URL = "https://github.com/ankanani/sdapovfastforward.git"
+GIT_BRANCH = "selfservelabs"
 SCRIPT_WORK_DIR = "/usr/src/app"
 SCRIPT_WORK_DIR_POSTMAN = f"{SCRIPT_WORK_DIR}/postman"
 
@@ -24,7 +25,11 @@ Note: git, python3, node.js, newman are all presumed installed via the Dockerfil
 
 # clone git repo if not exists already
 try:
-    repo = git.Repo.clone_from(GIT_REPO_URL, SCRIPT_WORK_DIR)
+    # repo = git.Repo.clone_from(GIT_REPO_URL, SCRIPT_WORK_DIR, branch=GIT_BRANCH)
+    repo = git.Repo(SCRIPT_WORK_DIR)
+    repo.remotes.origin.fetch()
+    repo.remotes.origin.pull()
+    repo.active_branch = GIT_BRANCH
 except Exception as e:
     print(f"Error cloning git repo: {e}")
     sys.exit(1)
