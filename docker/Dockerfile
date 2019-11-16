@@ -1,4 +1,4 @@
-FROM dmickels/sdapovfastforwardscripts-baseimage:latest
+FROM dmickels/sdapov-baseimage:latest
 MAINTAINER Dax Mickelson (dmickels@cisco.com)
 
 # Configure Script and GIT variables
