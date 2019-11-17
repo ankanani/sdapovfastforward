@@ -2,7 +2,7 @@ FROM dmickels/sdapov-baseimage:latest
 MAINTAINER Dax Mickelson (dmickels@cisco.com)
 
 # Configure Script and GIT variables
-ENV PYTHON_SCRIPT sdapodfastforward.py
+ENV PYTHON_SCRIPT sdapovfastforward.py
 ENV GIT_REPO https://github.com/ankanani/sdapovfastforward.git
 ENV GIT_BRANCH selfservelabs
 ENV SCRIPT_PATH sdapovfastforward
