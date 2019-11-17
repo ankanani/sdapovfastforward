@@ -2,9 +2,10 @@ FROM dmickels/sdapov-baseimage:latest
 MAINTAINER Dax Mickelson (dmickels@cisco.com)
 
 # Configure Script and GIT variables
-ENV python_script sdapodfastforward.py
+ENV PYTHON_SCRIPT sdapodfastforward.py
 ENV GIT_REPO https://github.com/ankanani/sdapovfastforward.git
 ENV GIT_BRANCH selfservelabs
+ENV SCRIPT_PATH sdapovfastforward
 
 WORKDIR /usr/src/app
 
@@ -14,4 +15,6 @@ RUN git clone $GIT_REPO
 COPY requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
-CMD python3 $python_script
+WORKDIR /usr/src/app/$SCRIPT_PATH
+
+CMD python3 $PYTHON_SCRIPT
