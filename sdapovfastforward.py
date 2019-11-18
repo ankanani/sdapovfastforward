@@ -48,7 +48,7 @@ try:
     subprocess.check_output(["git", "--version"])
     print("==> FOUND GIT INSTALLED\n")
 except OSError as e:
-    print ("==> IT SEEMS GIT IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL GIT")
+    print ("==> IT SEEMS GIT IS NOT INSTALLED ON YOUR SYSTEM. GIT IS REQUIRED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL GIT")
     while True:
         print("")
         a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF GIT? [Y/N] ")
@@ -188,7 +188,7 @@ try:
     subprocess.check_output(["node", "-v"])
     print("==> FOUND NODE.JS\n")
 except OSError as e:
-    print ("==> IT SEEMS NODE.JS IS NOT INSTALLED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL NODE.JS")
+    print ("==> IT SEEMS NODE.JS IS NOT INSTALLED ON YOUR SYSTEM. NODE.JS IS REQUIRED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL NODE.JS")
     while True:
         print("")
         a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF NODE.JS? [Y/N] ")
