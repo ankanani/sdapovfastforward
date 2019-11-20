@@ -231,12 +231,12 @@ except OSError as e:
 # checking for the existence of node- "newman"
 try:
     subprocess.check_output(["newman", "-v"], shell=True)
-    print("==> FOUND POSTMAN - NEWMAN NODE PACKAGE\n")
+    print("==> FOUND NEWMAN (CLI-BASED POSTMAN)  NODE PACKAGE\n")
 except subprocess.CalledProcessError as e:
-    print ("\n==> IT SEEMS POSTMAN - NEWMAN PACKAGE IS NOT INSTALLED. \nTHIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL POSTMAN - NEWMAN NODE PACKAGE")
+    print ("\n==> IT SEEMS NEWMAN (CLI-BASED POSTMAN)  NODE PACKAGE IS NOT INSTALLED. \nTHIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL NEWMAN (CLI-BASED POSTMAN)  NODE PACKAGE")
     while True:
         print("")
-        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF POSTMAN - NEWMAN NODE PACKAGE? [Y/N] ")
+        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF NEWMAN (CLI-BASED POSTMAN)  NODE PACKAGE? [Y/N] ")
         if a.lower() in ["yes","y"]:
             break
         elif a.lower() in ["no","n"]:
@@ -245,14 +245,14 @@ except subprocess.CalledProcessError as e:
         else:
             print("ENTER EITHER YES/NO")
     
-    print("\n==> INSTALLING POSTMAN - NEWMAN PACKAGE SETUP. THIS TAKES A FEW MINUTES")
+    print("\n==> INSTALLING NEWMAN (CLI-BASED POSTMAN) PACKAGE SETUP. THIS TAKES A FEW MINUTES")
     subprocess.call(["npm", "install", "-g", "newman"], shell=True)
     print("")
     try:
         subprocess.check_output(["newman", "-v"], shell=True)
-        print("==> POSTMAN - NEWMAN PACKAGE INSTALLED SUCCESSFULLY\n")
+        print("==> NEWMAN (CLI-BASED POSTMAN)  PACKAGE INSTALLED SUCCESSFULLY\n")
     except subprocess.CalledProcessError as e:
-        print("POSTMAN - NEWMAN PACKAGE COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY USING THE COMMAND node install -g newman AND THEN RUN THIS SCRIPT AGAIN.")
+        print("NEWMAN (CLI-BASED POSTMAN)  PACKAGE COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY USING THE COMMAND node install -g newman AND THEN RUN THIS SCRIPT AGAIN.")
         input("PRESS ENTER TO EXIT")
         sys.exit(0)
 
@@ -263,7 +263,7 @@ print("==> NOW LETS GET WORKING")
 print("\n")
 all_postman_collection_files = [f for f in os.listdir(SCRIPT_WORK_DIR_POSTMAN) if os.path.isfile( os.path.join(SCRIPT_WORK_DIR_POSTMAN, f) ) and "postman_collection" in f ]
 if len(all_postman_collection_files) > 0:
-    print("==> THE FOLLOWING POSTMAN COLLECTIONS WERE FOUND.")
+    print("==> THE FOLLOWING POSTMAN COLLECTIONS WERE FOUND:")
     count = 0
     for f in all_postman_collection_files:
         count+=1
@@ -296,6 +296,9 @@ else:
             a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
             if a.lower() in ["yes","y"]:
                 break
+            elif a.lower() in ["no","n"]:
+                input("PRESS ENTER TO EXIT")
+                sys.exit(0)
         except:
             print("THAT'S NOT A VALID OPTION!")
 
@@ -337,6 +340,9 @@ else:
             a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
             if a.lower() in ["yes","y"]:
                 break
+            elif a.lower() in ["no","n"]:
+                input("PRESS ENTER TO EXIT")
+                sys.exit(0)
         except:
             print("THAT'S NOT A VALID OPTION!")
 
@@ -353,7 +359,7 @@ while True:
     else:
         print("ENTER EITHER YES/NO")
 
-print("\n\n==> EXECUTING NEWMAN NOW\n")
+print("\n\n==> EXECUTING NEWMAN (CLI-BASED POSTMAN)  NOW\n")
 subprocess.call(["newman", "run", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_collection_file), "-e", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_environment_file), "-k"], shell=True)
 
 print("\n\n==> IF ALL API CALLS WORKED IN THE ABOVE RUN THEN YOU ARE ALL SET.\n")
