@@ -56,7 +56,7 @@ except OSError as e:
             break
         elif a.lower() in ["no","n"]:
             input("PRESS ENTER TO EXIT")
-            sys.exit(0)
+            os._exit(0)
         else:
             print("ENTER EITHER YES/NO")
     
@@ -75,11 +75,11 @@ except OSError as e:
         
         print("\n==> GIT IS INSTALLATION COMPLETE.  NOW RUN THIS SCRIPT AGAIN.")
         input("PRESS ENTER TO EXIT")
-        sys.exit(0)
+        os._exit(0)
     else:
         print("THIS SCRIPT COULD NOT FIND GIT INSTALLED ON YOUR SYSTEM. PLEASE INSTALL GIT AND THEN TRY AGAIN.")
         input("PRESS ENTER TO EXIT")
-        sys.exit(0)
+        os._exit(0)
 
 
 
@@ -132,11 +132,11 @@ except git.exc.InvalidGitRepositoryError:
     else:
         print("==> CANNOT FETCH GIT REPO SINCE A LOCAL DIRECTORY sdapovfastforward EXISTS. KINDLY DELETE OR RENAME THAT DIRECTORY TO SOMETHING ELSE AND TRY AGAIN.\n")
     input("PRESS ENTER TO EXIT")
-    sys.exit(0)
+    os._exit(0)
 except Exception as e:
     print("==> GIT REPO READING EXCEPTION %s. SO EXITING." % str(e))
     input("PRESS ENTER TO EXIT")
-    sys.exit(0)
+    os._exit(0)
 
 # calculating self checksum
 orig_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
@@ -152,7 +152,7 @@ try:
     if new_sum != orig_sum:
         print("==> THIS SCRIPT IS UPDATED. SO YOU NEED TO EXECUTE IT AGAIN.")
         input("PRESS ENTER TO EXIT")
-        sys.exit(0)
+        os._exit(0)
 except Exception as e:
     if "commit your changes" in str(e):
         print("==> IT SEEMS YOU MODIFIED THE SCRIPT FILES LOCALLY. SO THE SCRIPT CANNOT PULL AND OVERWRITE THE NEW UPDATES.\n")
@@ -172,7 +172,7 @@ except Exception as e:
                         break
                     elif a.lower() in ["no","n"]:
                         input("PRESS ENTER TO EXIT")
-                        sys.exit(0)
+                        os._exit(0)
                     else:
                         print("ENTER EITHER YES/NO")
                 break
@@ -196,7 +196,7 @@ except OSError as e:
             break
         elif a.lower() in ["no","n"]:
             input("PRESS ENTER TO EXIT")
-            sys.exit(0)
+            os._exit(0)
         else:
             print("ENTER EITHER YES/NO")
     
@@ -215,17 +215,17 @@ except OSError as e:
         
         print("\n==> NODE.JS IS INSTALLATION COMPLETE.  NOW RUN THIS SCRIPT AGAIN.")
         input("PRESS ENTER TO EXIT")
-        sys.exit(0)
+        os._exit(0)
     elif platform.system().lower() == "darwin":
             url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0.pkg"
             wget.download(url, "./")
             print("NODE.JS IS DOWNLOADED. JUST DOUBLE-CLICK TO INSTALL IT AND THEN RUN THIS SCRIPT AGAIN.")
             input("PRESS ENTER TO EXIT")
-            sys.exit(0)
+            os._exit(0)
     else:
         print("THIS SCRIPT IS RUNNING ON AN UNSUPPORTED OS. CURRENTLY ONLY WINDOWS OR MAC ARE SUPPORTED.")
         input("PRESS ENTER TO EXIT")
-        sys.exit(0)
+        os._exit(0)
 
 
 # checking for the existence of node- "newman"
@@ -241,7 +241,7 @@ except subprocess.CalledProcessError as e:
             break
         elif a.lower() in ["no","n"]:
             input("PRESS ENTER TO EXIT")
-            sys.exit(0)
+            os._exit(0)
         else:
             print("ENTER EITHER YES/NO")
     
@@ -254,7 +254,7 @@ except subprocess.CalledProcessError as e:
     except subprocess.CalledProcessError as e:
         print("NEWMAN (CLI-BASED POSTMAN)  PACKAGE COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY USING THE COMMAND node install -g newman AND THEN RUN THIS SCRIPT AGAIN.")
         input("PRESS ENTER TO EXIT")
-        sys.exit(0)
+        os._exit(0)
 
 # now the core part
 print("==> NOW LETS GET WORKING")
@@ -271,7 +271,7 @@ if len(all_postman_collection_files) > 0:
 else:
     print("==> COULD NOT FIND ANY FILE THAT APPEAR TO BE A POSTMAN COLLECTION!")
     input("PRESS ENTER TO EXIT")
-    sys.exit(0)
+    os._exit(0)
 
 selected_postman_collection_file = ''
 if len(all_postman_collection_files)==1:
@@ -282,7 +282,7 @@ if len(all_postman_collection_files)==1:
             break
         elif a.lower() in ["no","n"]:
             input("PRESS ENTER TO EXIT")
-            sys.exit(0)
+            os._exit(0)
         else:
             print("ENTER EITHER YES/NO")
 else:
@@ -298,7 +298,7 @@ else:
                 break
             elif a.lower() in ["no","n"]:
                 input("PRESS ENTER TO EXIT")
-                sys.exit(0)
+                os._exit(0)
         except:
             print("THAT'S NOT A VALID OPTION!")
 
@@ -315,7 +315,7 @@ if len(all_postman_environment_files) > 0:
 else:
     print("==> COULD NOT FIND ANY FILE THAT APPEAR TO BE A POSTMAN ENVIRONMENT!")
     input("PRESS ENTER TO EXIT")
-    sys.exit(0)
+    os._exit(0)
 
 selected_postman_environment_file = ''
 if len(all_postman_environment_files)==1:
@@ -326,7 +326,7 @@ if len(all_postman_environment_files)==1:
             break
         elif a.lower() in ["no","n"]:
             input("PRESS ENTER TO EXIT")
-            sys.exit(0)
+            os._exit(0)
         else:
             print("ENTER EITHER YES/NO")
 else:
@@ -342,7 +342,7 @@ else:
                 break
             elif a.lower() in ["no","n"]:
                 input("PRESS ENTER TO EXIT")
-                sys.exit(0)
+                os._exit(0)
         except:
             print("THAT'S NOT A VALID OPTION!")
 
@@ -355,7 +355,7 @@ while True:
         break
     elif a.lower() in ["no","n"]:
         input("PRESS ENTER TO EXIT")
-        sys.exit(0)
+        os._exit(0)
     else:
         print("ENTER EITHER YES/NO")
 
@@ -364,4 +364,4 @@ subprocess.call(["newman", "run", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected
 
 print("\n\n==> IF ALL API CALLS WORKED IN THE ABOVE RUN THEN YOU ARE ALL SET.\n")
 input("PRESS ENTER TO EXIT")
-sys.exit(0)
+os._exit(0)
