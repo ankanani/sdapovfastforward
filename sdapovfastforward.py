@@ -130,7 +130,7 @@ except git.exc.InvalidGitRepositoryError:
     if not os.path.exists(SCRIPT_WORK_DIR):
         try:
             repo = git.Repo.clone_from(GIT_REPO_URL, SCRIPT_WORK_DIR)
-            repo = git.Repo.clone_from(GIT_POSTMAN_REPO_URL, SCRIPT_WORK_DIR_POSTMAN)
+            repo = git.Repo.clone_from(GIT_POSTMAN_REPO_URL, os.path.join(SCRIPT_WORK_DIR,os.path.basename(SCRIPT_WORK_DIR_POSTMAN)))
             os.unlink(os.path.abspath(__file__))
             print ("==> Just execute this script again from SDAPOVFASTFORWARD directory\n")
         except Exception as e:
