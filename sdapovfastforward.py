@@ -147,21 +147,19 @@ except Exception as e:
 try:
     repo = git.Repo(SCRIPT_WORK_DIR_POSTMAN)
     #print("==> Found local git Postman files repo\n")
-except git.exc.InvalidGitRepositoryError:
-    print("==> Local git Postman files repo NOT found. Will fetch one from the Internet. You will see a new directory created at the end.\n")
+except Exception as e:
+    print("==> Local git Postman files repo NOT found. Will fetch one from the Internet.\n")
     if not os.path.exists(SCRIPT_WORK_DIR_POSTMAN):
         try:
             repo = git.Repo.clone_from(GIT_POSTMAN_REPO_URL, SCRIPT_WORK_DIR_POSTMAN)
         except Exception as e:
             print("==> Git repo reading exception %s. So exiting." % str(e))
+            input("Press <enter> to exit")
+            os._exit(0)
     else:
         print("==> Cannot fetch git Postman files repo since a local directory exists. Kindly delete or rename that directory to something else and try again.\n")
-    input("Press <enter> to exit")
-    os._exit(0)
-except Exception as e:
-    print("==> Git Postman files repo reading exception %s. So exiting." % str(e))
-    input("Press <enter> to exit")
-    os._exit(0)
+        input("Press <enter> to exit")
+        os._exit(0)
 
 # calculating self checksum
 orig_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
