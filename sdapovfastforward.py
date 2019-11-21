@@ -17,22 +17,30 @@ import subprocess
 import hashlib
 import platform
 
+# critical variables are in uppercase
+GIT_REPO_URL = "https://github.com/ankanani/sdapovfastforward.git"
+POSTMAN_REPO = "https://github.com/ankanani/sdapovfastforward-postman"
+SCRIPT_WORK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),"sdapovfastforward")
+SCRIPT_WORK_DIR_POSTMAN = os.path.join(os.path.dirname(os.path.abspath(__file__)),"postman")
+POSTMAN_COLLECTION_FILTER = "postman_collection"
+POSTMAN_ENVIRONMENT_FILTER = "postman_environment"
+
 print("")
-print("  === WELCOME TO THE SDA POV DEMO CONFIGURATION FAST-FORWARDING SCRIPT ===\n")
+print("  === Welcome to the SDA POV demo Configuration Fast-Forwarding script ===\n")
 
 # ask users to use python3 if they are on python2
 python_major_version = sys.version_info[0]
 if python_major_version == 3:
     pass
 elif python_major_version == 2:
-    print("IMPORTANT: IT APPEARS THAT THIS CODE IS EXECUTED USING PYTHON V2.")
-    print("YOU NEED TO EXECUTE THIS SCRIPT USING PYTHON V3.")
-    print("INSTALL PYTHON V3 AND ADD IT TO THE SYSTEM PATH, CHANGE .PY FILE ASSOCIATION TO PYTHON V3, IF REQUIRED.")
-    input("PRESS ENTER TO EXIT")
+    print("Important: It appears that this code is executed using Python v2.")
+    print("You need to execute this script using Python v3.")
+    print("Install Python v3 and add it to the system path, change .py file association to Python v3, if required.")
+    input("Press <enter> to exit")
     os._exit(0)
 else:
-    print("COULD NOT DETERMINE PYTHON VERSION. SO EXITING.\n")
-    input("PRESS ENTER TO EXIT")
+    print("Could not determine Python version. So exiting.\n")
+    input("Press <enter> to exit")
     os._exit(0)
 
 
@@ -40,7 +48,7 @@ else:
 try:
     import wget
 except:
-    print("==> INSTALLING THE REQUIRED PYTHON MODULE - wget\n")
+    print("==> Installing the required python module - WGET\n")
     subprocess.call([sys.executable, "-m", "pip", "install", "wget"])
     import wget
 
@@ -48,39 +56,39 @@ except:
 # checking if git exists
 try:
     subprocess.check_output(["git", "--version"])
-    print("==> FOUND GIT INSTALLED\n")
+    print("==> Found GIT installed\n")
 except OSError as e:
-    print ("==> IT SEEMS GIT IS NOT INSTALLED ON YOUR SYSTEM. GIT IS REQUIRED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL GIT")
+    print ("==> It seems GIT is not installed on your system. Git is required. This scipt will attempt to download and install GIT")
     while True:
         print("")
-        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF GIT? [Y/N] ")
+        a = input("Would you like to continue with download and installation of GIT? [Y/N] ")
         if a.lower() in ["yes","y"]:
             break
         elif a.lower() in ["no","n"]:
-            input("PRESS ENTER TO EXIT")
+            input("Press <enter> to exit")
             os._exit(0)
         else:
-            print("ENTER EITHER YES/NO")
+            print("Enter either yes/no")
     
-    print("\n==> DOWNLOADING GIT SETUP. THIS TAKES A FEW MINUTES")
+    print("\n==> Downloading GIT setup. This takes a few minutes")
     if platform.system().lower() == "windows":
         if platform.machine().endswith('64'):
             url = "https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-32-bit.exe"
             wget.download(url, "./")
-            print("\n\n==> INSTALLING GIT SETUP. THIS TAKES A FEW MINUTES")
+            print("\n\n==> installing GIT setup. This takes a few minutes")
             subprocess.call('Git-2.24.0.2-32-bit.exe /silent')
         else:
             url = "https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe"
             wget.download(url, "./")
-            print("\n\n==> INSTALLING GIT SETUP. THIS TAKES A FEW MINUTES")
+            print("\n\n==> installing GIT setup. This takes a few minutes")
             subprocess.call('Git-2.24.0.2-64-bit.exe /silent')
         
-        print("\n==> GIT IS INSTALLATION COMPLETE.  NOW RUN THIS SCRIPT AGAIN.")
-        input("PRESS ENTER TO EXIT")
+        print("\n==> GIT installation is complete.  Now run this script again so that the script can use it.")
+        input("Press <enter> to exit")
         os._exit(0)
     else:
-        print("THIS SCRIPT COULD NOT FIND GIT INSTALLED ON YOUR SYSTEM. PLEASE INSTALL GIT AND THEN TRY AGAIN.")
-        input("PRESS ENTER TO EXIT")
+        print("This script could not find GIT installed on your system. Please install GIT and then try again.")
+        input("Press <enter> to exit")
         os._exit(0)
 
 
@@ -89,7 +97,7 @@ except OSError as e:
 try:
     import git
 except:
-    print("==> INSTALLING THE REQUIRED PYTHON MODULE - gitpython\n")
+    print("==> Installing the required python module - GITPYTHON\n")
     subprocess.call([sys.executable, "-m", "pip", "install", "gitpython"])
     import git
 try:
@@ -98,7 +106,7 @@ try:
     from urllib3.exceptions import InsecureRequestWarning
     requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 except:
-    print("==> INSTALLING THE REQUIRED PYTHON MODULE - requests\n")
+    print("==> Installing the required python module - REQUESTS\n")
     subprocess.call([sys.executable, "-m", "pip", "install", "requests"])
     import requests
     from requests.exceptions import HTTPError
@@ -107,37 +115,32 @@ except:
 try:
     from postpython.core import PostPython
 except:
-    print("==> INSTALLING THE REQUIRED PYTHON MODULE - postpython\n")
+    print("==> Installing the required python module - POSTPYTHON\n")
     subprocess.call([sys.executable, "-m", "pip", "install", "postpython"])
     from postpython.core import PostPython
 
-print("==> FOUND ALL REQUIRED PYTHON PACKAGES\n")
-
-# critical variables are in uppercase
-GIT_REPO_URL = "https://github.com/ankanani/sdapovfastforward.git"
-SCRIPT_WORK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),"sdapovfastforward")
-SCRIPT_WORK_DIR_POSTMAN = os.path.join(os.path.dirname(os.path.abspath(__file__)),"postman")
+print("==> Found all required python packages.\n")
 
 # clone git repo if not exists already
 try:
     repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
-    print("==> FOUND LOCAL GIT REPO\n")
+    print("==> Found local git repo\n")
 except git.exc.InvalidGitRepositoryError:
-    print("==> LOCAL GIT REPO NOT FOUND. WILL FETCH ONE FROM THE INTERNET. YOU WILL SEE A NEW DIRECTORY CREATED AT THE END.\n")
+    print("==> Local git repo NOT found. Will fetch one from the Internet. You will see a new directory created at the end.\n")
     if not os.path.exists(SCRIPT_WORK_DIR):
         try:
             repo = git.Repo.clone_from(GIT_REPO_URL, SCRIPT_WORK_DIR)
             os.unlink(os.path.abspath(__file__))
-            print ("==> JUST EXECUTE THIS SCRIPT AGAIN FROM sdapovfastforward DIRECTORY\n")
+            print ("==> Just execute this script again from SDAPOVFASTFORWARD directory\n")
         except Exception as e:
-            print("==> GIT REPO READING EXCEPTION %s. SO EXITING." % str(e))
+            print("==> Git repo reading exception %s. So exiting." % str(e))
     else:
-        print("==> CANNOT FETCH GIT REPO SINCE A LOCAL DIRECTORY sdapovfastforward EXISTS. KINDLY DELETE OR RENAME THAT DIRECTORY TO SOMETHING ELSE AND TRY AGAIN.\n")
-    input("PRESS ENTER TO EXIT")
+        print("==> Cannot fetch git repo since a local directory SDAPOVFASTFORWARD exists. Kindly delete or rename that directory to something else and try again.\n")
+    input("Press <enter> to exit")
     os._exit(0)
 except Exception as e:
-    print("==> GIT REPO READING EXCEPTION %s. SO EXITING." % str(e))
-    input("PRESS ENTER TO EXIT")
+    print("==> Git repo reading exception %s. So exiting." % str(e))
+    input("Press <enter> to exit")
     os._exit(0)
 
 # calculating self checksum
@@ -146,224 +149,224 @@ orig_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
 # update local git repo
 try:
     repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
-    print("==> CHECKING FOR CODE UPDATES.\n")
+    print("==> Checking for code updates.\n")
     repo.remotes.origin.fetch()
     repo.remotes.origin.pull()
-    print("==> UPDATE CHECK COMPLETE.\n")
+    print("==> Update check complete.\n")
     new_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
     if new_sum != orig_sum:
-        print("==> THIS SCRIPT IS UPDATED. SO YOU NEED TO EXECUTE IT AGAIN.")
-        input("PRESS ENTER TO EXIT")
+        print("==> This script is updated. So you need to execute it again.")
+        input("Press <enter> to exit")
         os._exit(0)
 except Exception as e:
     if "commit your changes" in str(e):
-        print("==> IT SEEMS YOU MODIFIED THE SCRIPT FILES LOCALLY. SO THE SCRIPT CANNOT PULL AND OVERWRITE THE NEW UPDATES.\n")
+        print("==> It seems you modified the script files locally. So the script cannot pull and overwrite the new updates.\n")
         while True:
-            a = input("WOULD YOU LIKE TO OVERRIDE THE LOCAL CHANGES BEFORE UPDATING? [Y/N] ")
+            a = input("Would you like to override the local changes before updating? [Y/N] ")
             if a.lower() in ["yes","y"]:
                 repo.git.reset('--hard','origin/master')
                 repo.remotes.origin.pull()
-                print("\n==> LOCAL CHANGES ARE OVERWRITTEN AND UPDATE COMPLETE.\n")
+                print("\n==> Local changes are overwritten and update is complete.\n")
                 break
             elif a.lower() in ["no","n"]:
                 while True:
                     print("")
-                    a = input("WOULD YOU LIKE TO CONTINUE WITH EXISTING VERSION OF THE SCRIPT? [Y/N] ")
+                    a = input("Would you like to continue with existing version of the script? [Y/N] ")
                     if a.lower() in ["yes","y"]:
-                        print("\n==> WILL CONTINUE WITH EXISTING VERSION OF THE SCRIPT.\n")
+                        print("\n==> Will continue with existing version of the script.\n")
                         break
                     elif a.lower() in ["no","n"]:
-                        input("PRESS ENTER TO EXIT")
+                        input("Press <enter> to exit")
                         os._exit(0)
                     else:
-                        print("ENTER EITHER YES/NO")
+                        print("Enter either yes/no")
                 break
             else:
-                print("ENTER EITHER YES/NO")
+                print("Enter either yes/no")
     else:
-        print("==> COULD NOT CHECK FOR UPDATES DUE TO THE FOLLOWING EXCEPTION - %s" % str(e))
-        print("==> WILL CONTINUE WITH EXISTING VERSION OF THE SCRIPT.\n")
+        print("==> Could NOT check for updates due to the following exception - %s" % str(e))
+        print("==> Will continue with existing version of the script.\n")
     
 
 # checking if node.js exists for - "newman" program
 try:
     subprocess.check_output(["node", "-v"])
-    print("==> FOUND NODE.JS\n")
+    print("==> Found NODE.JS\n")
 except OSError as e:
-    print ("==> IT SEEMS NODE.JS IS NOT INSTALLED ON YOUR SYSTEM. NODE.JS IS REQUIRED. THIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL NODE.JS")
+    print ("==> It seems NODE.JS is NOT installed on your system. NODE.JS is required. This scipt will attempt to download and install NODE.JS")
     while True:
         print("")
-        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF NODE.JS? [Y/N] ")
+        a = input("Would you like to continue with download and installation of NODE.JS? [Y/N] ")
         if a.lower() in ["yes","y"]:
             break
         elif a.lower() in ["no","n"]:
-            input("PRESS ENTER TO EXIT")
+            input("Press <enter> to exit")
             os._exit(0)
         else:
-            print("ENTER EITHER YES/NO")
+            print("Enter either yes/no")
     
-    print("\n==> DOWNLOADING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
+    print("\n==> Downloading NODE.JS setup. This takes a few minutes")
     if platform.system().lower() == "windows":
         if platform.machine().endswith('64'):
             url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msi"
             wget.download(url, "./")
-            print("\n\n==> INSTALLING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
+            print("\n\n==> Installing NODE.JS setup. This takes a few minutes")
             subprocess.call('msiexec.exe /qb /i node-v12.13.0-x64.msi')
         else:
             url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0-x86.msi"
             wget.download(url, "./")
-            print("\n\n==> INSTALLING NODE.JS SETUP. THIS TAKES A FEW MINUTES")
+            print("\n\n==> Installing NODE.JS setup. This takes a few minutes")
             subprocess.call('msiexec.exe /qb /i node-v12.13.0-x86.msi')
         
-        print("\n==> NODE.JS IS INSTALLATION COMPLETE.  NOW RUN THIS SCRIPT AGAIN.")
-        input("PRESS ENTER TO EXIT")
+        print("\n==> NODE.JS installation is complete.  Now run this script again so that the script can use it.")
+        input("Press <enter> to exit")
         os._exit(0)
     elif platform.system().lower() == "darwin":
             url = "https://nodejs.org/dist/v12.13.0/node-v12.13.0.pkg"
             wget.download(url, "./")
-            print("NODE.JS IS DOWNLOADED. JUST DOUBLE-CLICK TO INSTALL IT AND THEN RUN THIS SCRIPT AGAIN.")
-            input("PRESS ENTER TO EXIT")
+            print("NODE.JS is downloaded. Just double-click to install it and then run this script again.")
+            input("Press <enter> to exit")
             os._exit(0)
     else:
-        print("THIS SCRIPT IS RUNNING ON AN UNSUPPORTED OS. CURRENTLY ONLY WINDOWS OR MAC ARE SUPPORTED.")
-        input("PRESS ENTER TO EXIT")
+        print("This script is running on an unsupported OS. Currently only Windows and MAC are supported.")
+        input("Press <enter> to exit")
         os._exit(0)
 
 
 # checking for the existence of node- "newman"
 try:
     subprocess.check_output(["newman", "-v"], shell=True)
-    print("==> FOUND NEWMAN (CLI-BASED POSTMAN)  NODE PACKAGE\n")
+    print("==> Found NEWMAN (cli-based POSTMAN) node package\n")
 except subprocess.CalledProcessError as e:
-    print ("\n==> IT SEEMS NEWMAN (CLI-BASED POSTMAN)  NODE PACKAGE IS NOT INSTALLED. \nTHIS SCIPT WILL ATTEMPT TO DOWNLOAD AND INSTALL NEWMAN (CLI-BASED POSTMAN)  NODE PACKAGE")
+    print ("\n==> It seems NEWMAN (cli-based POSTMAN) node package is NOT installed. \nThis scipt will attempt to download and install NEWMAN (cli-based POSTMAN) node package")
     while True:
         print("")
-        a = input("WOULD YOU LIKE TO CONTINUE WITH DOWNLOAD AND INSTALLATION OF NEWMAN (CLI-BASED POSTMAN)  NODE PACKAGE? [Y/N] ")
+        a = input("Would you like to continue with download and installation of NEWMAN (cli-based POSTMAN) node package? [Y/N] ")
         if a.lower() in ["yes","y"]:
             break
         elif a.lower() in ["no","n"]:
-            input("PRESS ENTER TO EXIT")
+            input("Press <enter> to exit")
             os._exit(0)
         else:
-            print("ENTER EITHER YES/NO")
+            print("Enter either yes/no")
     
-    print("\n==> INSTALLING NEWMAN (CLI-BASED POSTMAN) PACKAGE SETUP. THIS TAKES A FEW MINUTES")
+    print("\n==> Installing NEWMAN (cli-based POSTMAN) package setup. This takes a few minutes")
     subprocess.call(["npm", "install", "-g", "newman"], shell=True)
     print("")
     try:
         subprocess.check_output(["newman", "-v"], shell=True)
-        print("==> NEWMAN (CLI-BASED POSTMAN)  PACKAGE INSTALLED SUCCESSFULLY\n")
+        print("==> NEWMAN (cli-based POSTMAN) package installed successfully\n")
     except subprocess.CalledProcessError as e:
-        print("NEWMAN (CLI-BASED POSTMAN)  PACKAGE COULD NOT BE INSTALLED AUTOMATICALLY. TRY INSTALLING IT MANUALLY USING THE COMMAND node install -g newman AND THEN RUN THIS SCRIPT AGAIN.")
-        input("PRESS ENTER TO EXIT")
+        print("NEWMAN (cli-based POSTMAN) package could not be installed automatically. try installing it manually using the command \"node install -g newman\" and then run this script again.")
+        input("Press <enter> to exit")
         os._exit(0)
 
 # now the core part
-print("==> NOW LETS GET WORKING")
+print("==> All dependencies checked. Now lets get into action")
 
 # search for postman collections and ask the user to choose one
 print("\n")
-all_postman_collection_files = [f for f in os.listdir(SCRIPT_WORK_DIR_POSTMAN) if os.path.isfile( os.path.join(SCRIPT_WORK_DIR_POSTMAN, f) ) and "postman_collection" in f ]
+all_postman_collection_files = [f for f in os.listdir(SCRIPT_WORK_DIR_POSTMAN) if os.path.isfile( os.path.join(SCRIPT_WORK_DIR_POSTMAN, f) ) and POSTMAN_COLLECTION_FILTER in f ]
 if len(all_postman_collection_files) > 0:
-    print("==> THE FOLLOWING POSTMAN COLLECTIONS WERE FOUND:")
+    print("==> The following Postman Collections were found:")
     count = 0
     for f in all_postman_collection_files:
         count+=1
         print("%s - %s" % (count,f) )
 else:
-    print("==> COULD NOT FIND ANY FILE THAT APPEAR TO BE A POSTMAN COLLECTION!")
-    input("PRESS ENTER TO EXIT")
+    print("==> Could not find any file that appear to be a Postman Collection!")
+    input("Press <enter> to exit")
     os._exit(0)
 
 selected_postman_collection_file = ''
 if len(all_postman_collection_files)==1:
     selected_postman_collection_file = all_postman_collection_files[0]
     while True:
-        a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
+        a = input("\nWould you like to continue with this option? [Y/N] ")
         if a.lower() in ["yes","y"]:
             break
         elif a.lower() in ["no","n"]:
-            input("PRESS ENTER TO EXIT")
+            input("Press <enter> to exit")
             os._exit(0)
         else:
-            print("ENTER EITHER YES/NO")
+            print("Enter either yes/no")
 else:
     while True:
         print("")
         try:
-            a = int(input("WHICH ONE WOULD YOU LIKE TO UTILIZE? [1-%s] " % (len(all_postman_collection_files)) ))
+            a = int(input("Which one would you like to utilize? [1-%s] " % (len(all_postman_collection_files)) ))
             selected_postman_collection_file = all_postman_collection_files[a-1]
-            print("\nYOU HAVE SELECTED POSTMAN COLLECTION:- %s" % (selected_postman_collection_file) )
+            print("\nYou have selected Postman Collection:- %s" % (selected_postman_collection_file) )
             
-            a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
+            a = input("\nWould you like to continue with this option? [Y/N] ")
             if a.lower() in ["yes","y"]:
                 break
             elif a.lower() in ["no","n"]:
-                input("PRESS ENTER TO EXIT")
+                input("Press <enter> to exit")
                 os._exit(0)
         except:
-            print("THAT'S NOT A VALID OPTION!")
+            print("That's not a valid option!")
 
 
 # search for postman environments and ask the user to choose one
 print("\n")
-all_postman_environment_files = [f for f in os.listdir(SCRIPT_WORK_DIR_POSTMAN) if os.path.isfile( os.path.join(SCRIPT_WORK_DIR_POSTMAN, f) ) and "postman_environment" in f ]
+all_postman_environment_files = [f for f in os.listdir(SCRIPT_WORK_DIR_POSTMAN) if os.path.isfile( os.path.join(SCRIPT_WORK_DIR_POSTMAN, f) ) and POSTMAN_ENVIRONMENT_FILTER in f ]
 if len(all_postman_environment_files) > 0:
-    print("==> THE FOLLOWING POSTMAN ENVIRONMENTS WERE FOUND.")
+    print("==> The following Postman Environments were found.")
     count = 0
     for f in all_postman_environment_files:
         count+=1
         print("%s - %s" % (count,f) )
 else:
-    print("==> COULD NOT FIND ANY FILE THAT APPEAR TO BE A POSTMAN ENVIRONMENT!")
-    input("PRESS ENTER TO EXIT")
+    print("==> Could not find any file that appear to be a Postman Environment!")
+    input("Press <enter> to exit")
     os._exit(0)
 
 selected_postman_environment_file = ''
 if len(all_postman_environment_files)==1:
     selected_postman_environment_file = all_postman_environment_files[0]
     while True:
-        a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
+        a = input("\nWould you like to continue with this option? [Y/N] ")
         if a.lower() in ["yes","y"]:
             break
         elif a.lower() in ["no","n"]:
-            input("PRESS ENTER TO EXIT")
+            input("Press <enter> to exit")
             os._exit(0)
         else:
-            print("ENTER EITHER YES/NO")
+            print("Enter either yes/no")
 else:
     while True:
         print("")
         try:
-            a = int(input("WHICH ONE WOULD YOU LIKE TO UTILIZE? [1-%s] " % (len(all_postman_environment_files)) ))
+            a = int(input("Which one would you like to utilize? [1-%s] " % (len(all_postman_environment_files)) ))
             selected_postman_environment_file = all_postman_environment_files[a-1]
-            print("\nYOU HAVE SELECTED POSTMAN ENVIRONMENT:- %s" % (selected_postman_environment_file) )
+            print("\nYou have selected Postman Environment:- %s" % (selected_postman_environment_file) )
             
-            a = input("\nWOULD YOU LIKE TO CONTINUE WITH THIS OPTION? [Y/N] ")
+            a = input("\nWould you like to continue with this option? [Y/N] ")
             if a.lower() in ["yes","y"]:
                 break
             elif a.lower() in ["no","n"]:
-                input("PRESS ENTER TO EXIT")
+                input("Press <enter> to exit")
                 os._exit(0)
         except:
-            print("THAT'S NOT A VALID OPTION!")
+            print("That's not a valid option!")
 
 
 # Now lets run the "newman"
 while True:
-    print("\n==> WITH THE FOLLOWING SELECTION?\nPOSTMAN COLLECTION - %s\nPOSTMAN ENVIRONMENT - %s\n" % (selected_postman_collection_file,selected_postman_environment_file))
-    a = input("\nARE YOU READY TO FAST FORWARD YOUR SDA POV? [Y/N] ")
+    print("\n==> With the following selection?\nPostman Collection - %s\nPostman Environment - %s\n" % (selected_postman_collection_file,selected_postman_environment_file))
+    a = input("\nAre you ready to fast forward your SDA POV? [Y/N] ")
     if a.lower() in ["yes","y"]:
         break
     elif a.lower() in ["no","n"]:
-        input("PRESS ENTER TO EXIT")
+        input("Press <enter> to exit")
         os._exit(0)
     else:
-        print("ENTER EITHER YES/NO")
+        print("Enter either yes/no")
 
-print("\n\n==> EXECUTING NEWMAN (CLI-BASED POSTMAN)  NOW\n")
+print("\n\n==> Executing NEWMAN (cli-based POSTMAN) now to run the API calls\n")
 subprocess.call(["newman", "run", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_collection_file), "-e", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_environment_file), "-k"], shell=True)
 
-print("\n\n==> IF ALL API CALLS WORKED IN THE ABOVE RUN THEN YOU ARE ALL SET.\n")
-input("PRESS ENTER TO EXIT")
+print("\n\n==> If all API calls worked in the above run then you are all set.\n")
+input("Press <enter> to exit")
 os._exit(0)
