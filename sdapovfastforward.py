@@ -19,7 +19,7 @@ import platform
 
 # critical variables are in uppercase
 GIT_REPO_URL = "https://github.com/ankanani/sdapovfastforward.git"
-POSTMAN_REPO = "https://github.com/ankanani/sdapovfastforward-postman"
+GIT_POSTMAN_REPO_URL = "https://github.com/ankanani/sdapovfastforward-postman"
 SCRIPT_WORK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),"sdapovfastforward")
 SCRIPT_WORK_DIR_POSTMAN = os.path.join(os.path.dirname(os.path.abspath(__file__)),"postman")
 POSTMAN_COLLECTION_FILTER = "postman_collection"
@@ -56,7 +56,7 @@ except:
 # checking if git exists
 try:
     subprocess.check_output(["git", "--version"])
-    print("==> Found GIT installed\n")
+    #print("==> Found GIT installed\n")
 except OSError as e:
     print ("==> It seems GIT is not installed on your system. Git is required. This scipt will attempt to download and install GIT")
     while True:
@@ -119,14 +119,14 @@ except:
     subprocess.call([sys.executable, "-m", "pip", "install", "postpython"])
     from postpython.core import PostPython
 
-print("==> Found all required python packages.\n")
+#print("==> Found all required python packages.\n")
 
-# clone git repo if not exists already
+# clone git code repo if not exists already
 try:
     repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
-    print("==> Found local git repo\n")
+    #print("==> Found local git code repo\n")
 except git.exc.InvalidGitRepositoryError:
-    print("==> Local git repo NOT found. Will fetch one from the Internet. You will see a new directory created at the end.\n")
+    print("==> Local git code repo NOT found. Will fetch one from the Internet. You will see a new directory created at the end.\n")
     if not os.path.exists(SCRIPT_WORK_DIR):
         try:
             repo = git.Repo.clone_from(GIT_REPO_URL, SCRIPT_WORK_DIR)
@@ -135,24 +135,44 @@ except git.exc.InvalidGitRepositoryError:
         except Exception as e:
             print("==> Git repo reading exception %s. So exiting." % str(e))
     else:
-        print("==> Cannot fetch git repo since a local directory SDAPOVFASTFORWARD exists. Kindly delete or rename that directory to something else and try again.\n")
+        print("==> Cannot fetch git code repo since a local directory SDAPOVFASTFORWARD exists. Kindly delete or rename that directory to something else and try again.\n")
     input("Press <enter> to exit")
     os._exit(0)
 except Exception as e:
-    print("==> Git repo reading exception %s. So exiting." % str(e))
+    print("==> Git code repo reading exception %s. So exiting." % str(e))
+    input("Press <enter> to exit")
+    os._exit(0)
+
+# clone git postman files repo if not exists already
+try:
+    repo = git.Repo(SCRIPT_WORK_DIR_POSTMAN)
+    #print("==> Found local git Postman files repo\n")
+except git.exc.InvalidGitRepositoryError:
+    print("==> Local git Postman files repo NOT found. Will fetch one from the Internet. You will see a new directory created at the end.\n")
+    if not os.path.exists(SCRIPT_WORK_DIR_POSTMAN):
+        try:
+            repo = git.Repo.clone_from(GIT_POSTMAN_REPO_URL, SCRIPT_WORK_DIR_POSTMAN)
+        except Exception as e:
+            print("==> Git repo reading exception %s. So exiting." % str(e))
+    else:
+        print("==> Cannot fetch git Postman files repo since a local directory exists. Kindly delete or rename that directory to something else and try again.\n")
+    input("Press <enter> to exit")
+    os._exit(0)
+except Exception as e:
+    print("==> Git Postman files repo reading exception %s. So exiting." % str(e))
     input("Press <enter> to exit")
     os._exit(0)
 
 # calculating self checksum
 orig_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
 
-# update local git repo
+# update local git code repo
 try:
     repo = git.Repo(os.path.dirname(os.path.abspath(__file__)))
-    print("==> Checking for code updates.\n")
+    print("==> Checking for code updates\n")
     repo.remotes.origin.fetch()
     repo.remotes.origin.pull()
-    print("==> Update check complete.\n")
+    print("==> Update check complete\n")
     new_sum = hashlib.md5(open(os.path.abspath(__file__),"rb").read()).hexdigest()
     if new_sum != orig_sum:
         print("==> This script is updated. So you need to execute it again.")
@@ -186,12 +206,48 @@ except Exception as e:
     else:
         print("==> Could NOT check for updates due to the following exception - %s" % str(e))
         print("==> Will continue with existing version of the script.\n")
-    
+
+# update local git postman files repo
+try:
+    repo = git.Repo(SCRIPT_WORK_DIR_POSTMAN)
+    print("==> Checking for Postman File updates\n")
+    repo.remotes.origin.fetch()
+    repo.remotes.origin.pull()
+    print("==> Update check complete\n")
+except Exception as e:
+    if "commit your changes" in str(e):
+        print("==> It seems you modified the Postman Files locally. So the script cannot pull and overwrite the new updates.\n")
+        while True:
+            a = input("Would you like to override the local changes before updating? [Y/N] ")
+            if a.lower() in ["yes","y"]:
+                repo.git.reset('--hard','origin/master')
+                repo.remotes.origin.pull()
+                print("\n==> Local changes are overwritten and update is complete.\n")
+                break
+            elif a.lower() in ["no","n"]:
+                while True:
+                    print("")
+                    a = input("Would you like to continue with existing version of the Postman Files? [Y/N] ")
+                    if a.lower() in ["yes","y"]:
+                        print("\n==> Will continue with existing version of the Postman Files.\n")
+                        break
+                    elif a.lower() in ["no","n"]:
+                        input("Press <enter> to exit")
+                        os._exit(0)
+                    else:
+                        print("Enter either yes/no")
+                break
+            else:
+                print("Enter either yes/no")
+    else:
+        print("==> Could NOT check for updates due to the following exception - %s" % str(e))
+        print("==> Will continue with existing version of the Postman Files.\n")
+
 
 # checking if node.js exists for - "newman" program
 try:
     subprocess.check_output(["node", "-v"])
-    print("==> Found NODE.JS\n")
+    #print("==> Found NODE.JS\n")
 except OSError as e:
     print ("==> It seems NODE.JS is NOT installed on your system. NODE.JS is required. This scipt will attempt to download and install NODE.JS")
     while True:
@@ -236,7 +292,7 @@ except OSError as e:
 # checking for the existence of node- "newman"
 try:
     subprocess.check_output(["newman", "-v"], shell=True)
-    print("==> Found NEWMAN (cli-based POSTMAN) node package\n")
+    #print("==> Found NEWMAN (cli-based POSTMAN) node package\n")
 except subprocess.CalledProcessError as e:
     print ("\n==> It seems NEWMAN (cli-based POSTMAN) node package is NOT installed. \nThis scipt will attempt to download and install NEWMAN (cli-based POSTMAN) node package")
     while True:
@@ -272,7 +328,7 @@ if len(all_postman_collection_files) > 0:
     count = 0
     for f in all_postman_collection_files:
         count+=1
-        print("%s - %s" % (count,f) )
+        print("    %s - %s" % (count,f) )
 else:
     print("==> Could not find any file that appear to be a Postman Collection!")
     input("Press <enter> to exit")
@@ -281,29 +337,14 @@ else:
 selected_postman_collection_file = ''
 if len(all_postman_collection_files)==1:
     selected_postman_collection_file = all_postman_collection_files[0]
-    while True:
-        a = input("\nWould you like to continue with this option? [Y/N] ")
-        if a.lower() in ["yes","y"]:
-            break
-        elif a.lower() in ["no","n"]:
-            input("Press <enter> to exit")
-            os._exit(0)
-        else:
-            print("Enter either yes/no")
+    #print("\nSelected Postman Collection:- %s" % (selected_postman_collection_file) )
 else:
     while True:
-        print("")
         try:
             a = int(input("Which one would you like to utilize? [1-%s] " % (len(all_postman_collection_files)) ))
             selected_postman_collection_file = all_postman_collection_files[a-1]
-            print("\nYou have selected Postman Collection:- %s" % (selected_postman_collection_file) )
-            
-            a = input("\nWould you like to continue with this option? [Y/N] ")
-            if a.lower() in ["yes","y"]:
-                break
-            elif a.lower() in ["no","n"]:
-                input("Press <enter> to exit")
-                os._exit(0)
+            #print("\nSelected Postman Collection:- %s" % (selected_postman_collection_file) )
+            break
         except:
             print("That's not a valid option!")
 
@@ -312,11 +353,11 @@ else:
 print("\n")
 all_postman_environment_files = [f for f in os.listdir(SCRIPT_WORK_DIR_POSTMAN) if os.path.isfile( os.path.join(SCRIPT_WORK_DIR_POSTMAN, f) ) and POSTMAN_ENVIRONMENT_FILTER in f ]
 if len(all_postman_environment_files) > 0:
-    print("==> The following Postman Environments were found.")
+    print("==> The following Postman Environments were found:")
     count = 0
     for f in all_postman_environment_files:
         count+=1
-        print("%s - %s" % (count,f) )
+        print("    %s - %s" % (count,f) )
 else:
     print("==> Could not find any file that appear to be a Postman Environment!")
     input("Press <enter> to exit")
@@ -325,40 +366,26 @@ else:
 selected_postman_environment_file = ''
 if len(all_postman_environment_files)==1:
     selected_postman_environment_file = all_postman_environment_files[0]
-    while True:
-        a = input("\nWould you like to continue with this option? [Y/N] ")
-        if a.lower() in ["yes","y"]:
-            break
-        elif a.lower() in ["no","n"]:
-            input("Press <enter> to exit")
-            os._exit(0)
-        else:
-            print("Enter either yes/no")
+    #print("\nSelected Postman Environment:- %s" % (selected_postman_environment_file) )
 else:
     while True:
-        print("")
         try:
             a = int(input("Which one would you like to utilize? [1-%s] " % (len(all_postman_environment_files)) ))
             selected_postman_environment_file = all_postman_environment_files[a-1]
-            print("\nYou have selected Postman Environment:- %s" % (selected_postman_environment_file) )
-            
-            a = input("\nWould you like to continue with this option? [Y/N] ")
-            if a.lower() in ["yes","y"]:
-                break
-            elif a.lower() in ["no","n"]:
-                input("Press <enter> to exit")
-                os._exit(0)
+            #print("\nSelected Postman Environment:- %s" % (selected_postman_environment_file) )
+            break
         except:
             print("That's not a valid option!")
 
 
 # Now lets run the "newman"
 while True:
-    print("\n==> With the following selection?\nPostman Collection - %s\nPostman Environment - %s\n" % (selected_postman_collection_file,selected_postman_environment_file))
-    a = input("\nAre you ready to fast forward your SDA POV? [Y/N] ")
+    print("\n\n==> With the following selection:\nPostman Collection - %s\nPostman Environment - %s\n" % (selected_postman_collection_file,selected_postman_environment_file))
+    a = input("Are you ready to Fast-Forward your SDA POV setup? [Y/N] ")
     if a.lower() in ["yes","y"]:
         break
     elif a.lower() in ["no","n"]:
+        print("\nYou answered No. So you can run the script again with the correct choices.")
         input("Press <enter> to exit")
         os._exit(0)
     else:
