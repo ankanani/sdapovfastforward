@@ -391,7 +391,7 @@ while True:
         print("Enter either yes/no")
 
 print("\n\n==> Executing NEWMAN (cli-based POSTMAN) now to run the API calls\n")
-subprocess.call(["newman", "run", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_collection_file), "-e", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_environment_file), "-k"], shell=True)
+subprocess.call(["newman", "run", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_collection_file), "-e", os.path.join(SCRIPT_WORK_DIR_POSTMAN, selected_postman_environment_file), "-k", "--delay-request", "500"], shell=True)
 
 print("\n\n==> If all API calls worked in the above run then you are all set.\n")
 input("Press <enter> to exit")
